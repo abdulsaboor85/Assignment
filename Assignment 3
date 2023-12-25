@@ -1,0 +1,122 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// Product Class
+class Product {
+public:
+    int productId;
+    string productName;
+    double price;
+
+    // Constructor
+    Product(int id, const string& name, double p) : productId(id), productName(name), price(p) {}
+
+    // Function to display product details
+    void displayProductDetails() {
+        cout << "Product ID: " << productId << ", Name: " << productName << ", Price: $" << price << endl;
+    }
+};
+
+// ShoppingCart Class
+class ShoppingCart {
+private:
+    Product** products;
+    int count;
+
+public:
+    // Constructor
+    ShoppingCart() : products(nullptr), count(0) {}
+
+    // Function to add a product to the cart
+    void addProduct(Product* product) {
+        Product** temp = new Product*[count + 1];
+        for (int i = 0; i < count; ++i) {
+            temp[i] = products[i];
+        }
+        temp[count++] = product;
+        delete[] products;
+        products = temp;
+    }
+
+    // Function to display all products in the cart
+    void displayAllProducts() {
+        cout << "Products in the shopping cart:" << endl;
+        for (int i = 0; i < count; ++i) {
+            products[i]->displayProductDetails();
+        }
+    }
+
+    // Function to calculate the total cost
+    double calculateTotalCost() {
+        double totalCost = 0.0;
+        for (int i = 0; i < count; ++i) {
+            totalCost += products[i]->price;
+        }
+        return totalCost;
+    }
+
+    // Destructor
+    ~ShoppingCart() {
+        delete[] products;
+    }
+};
+
+// User Class
+class User {
+public:
+    int userId;
+    ShoppingCart* shoppingCart; // Association
+
+    // Constructor
+    User(int id) : userId(id), shoppingCart(nullptr) {}
+
+    // Function to display user details
+    void displayUserDetails() {
+        cout << "User ID: " << userId << endl;
+    }
+};
+
+int main() {
+    // Create instances of products
+    Product* product1 = new Product(1, "Product A", 20.0);
+    Product* product2 = new Product(2, "Product B", 30.0);
+
+    // Create instances of users and shopping carts
+    User* user1 = new User(101);
+    User* user2 = new User(102);
+
+    // Demonstrate association
+    user1->shoppingCart = new ShoppingCart();
+    user2->shoppingCart = new ShoppingCart();
+
+    // Demonstrate aggregation
+    user1->shoppingCart->addProduct(product1);
+    user2->shoppingCart->addProduct(product2);
+
+    // Demonstrate composition
+    user1->shoppingCart->addProduct(new Product(3, "Product C", 15.0));
+
+    // Display user details
+    user1->displayUserDetails();
+    user2->displayUserDetails();
+
+    // Display products in the shopping cart
+    user1->shoppingCart->displayAllProducts();
+    user2->shoppingCart->displayAllProducts();
+
+    // Calculate total cost
+    cout << "Total cost for user 1: $" << user1->shoppingCart->calculateTotalCost() << endl;
+    cout << "Total cost for user 2: $" << user2->shoppingCart->calculateTotalCost() << endl;
+
+    // Clean up memory
+    delete product1;
+    delete product2;
+    delete user1->shoppingCart;
+    delete user2->shoppingCart;
+    delete user1;
+    delete user2;
+
+    return 0;
+}
