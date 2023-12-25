@@ -1,0 +1,75 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// Abstract Base Class
+class Shape {
+public:
+    virtual ~Shape() {}
+
+    // Pure virtual function for calculating area
+    virtual double calculateArea() const = 0;
+
+    // Common function to display shape information
+    void displayInfo() const {
+        cout << "Shape type: " << getType() << "\n";
+        cout << "Area: " << calculateArea() << "\n";
+    }
+
+    // Pure virtual function to get the type of the shape
+    virtual string getType() const = 0;
+};
+
+// Concrete Derived Class 1: Circle
+class Circle : public Shape {
+private:
+    double radius;
+
+public:
+    Circle(double r) : radius(r) {}
+
+    // Implementation of the pure virtual function to calculate area
+    double calculateArea() const override {
+        return 3.14159 * radius * radius;
+    }
+
+    // Implementation of the pure virtual function to get the type
+    string getType() const override {
+        return "Circle";
+    }
+};
+
+// Concrete Derived Class 2: Rectangle
+class Rectangle : public Shape {
+private:
+    double length;
+    double width;
+
+public:
+    Rectangle(double l, double w) : length(l), width(w) {}
+
+    // Implementation of the pure virtual function to calculate area
+    double calculateArea() const override {
+        return length * width;
+    }
+
+    // Implementation of the pure virtual function to get the type
+    string getType() const override {
+        return "Rectangle";
+    }
+};
+
+int main() {
+    // Example usage
+    Circle circle(5.0);
+    Rectangle rectangle(4.0, 6.0);
+
+    cout << "Circle Info:\n";
+    circle.displayInfo();
+
+    cout << "\nRectangle Info:\n";
+    rectangle.displayInfo();
+
+    return 0;
+}
