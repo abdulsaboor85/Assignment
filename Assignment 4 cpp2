@@ -1,0 +1,55 @@
+// sorting_performance.cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <chrono>
+
+using namespace std;
+
+int main() {
+    const int size = 100000;
+    vector<int> numbers(size);
+
+    // Initialize the vector in descending order
+    for (int i = 0; i < size; ++i) {
+        numbers[i] = size - i;
+    }
+
+    // Measure execution time for Bubble Sort
+    auto start_bubble = chrono::high_resolution_clock::now();
+    // Bubble Sort implementation here
+    for (int i = 0; i < size - 1; ++i) {
+        for (int j = 0; j < size - i - 1; ++j) {
+            if (numbers[j] > numbers[j + 1]) {
+                swap(numbers[j], numbers[j + 1]);
+            }
+        }
+    }
+    auto end_bubble = chrono::high_resolution_clock::now();
+    chrono::duration<double> duration_bubble = end_bubble - start_bubble;
+
+    // Measure execution time for STL sort
+    auto start_stl_sort = chrono::high_resolution_clock::now();
+    sort(numbers.begin(), numbers.end());
+    auto end_stl_sort = chrono::high_resolution_clock::now();
+    chrono::duration<double> duration_stl_sort = end_stl_sort - start_stl_sort;
+
+    // Print execution times
+    cout << "Bubble Sort Execution Time: " << duration_bubble.count() << " seconds\n";
+    cout << "STL Sort Execution Time: " << duration_stl_sort.count() << " seconds\n";
+
+    // Print first 10 and last 10 integers
+    cout << "First 10 integers: ";
+    for (int i = 0; i < 10; ++i) {
+        cout << numbers[i] << " ";
+    }
+    cout << "\n";
+
+    cout << "Last 10 integers: ";
+    for (int i = size - 10; i < size; ++i) {
+        cout << numbers[i] << " ";
+    }
+    cout << "\n";
+
+    return 0;
+}
