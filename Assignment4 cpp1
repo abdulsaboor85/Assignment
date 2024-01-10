@@ -1,0 +1,51 @@
+//Inventory Management System using vectors:
+
+// inventory_management.cpp
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+struct Product {
+    int id;
+    string name;
+    // Add other relevant product information
+
+    // Constructor
+    Product(int i, const string& n) : id(i), name(n) {}
+};
+
+vector<Product> inventory;
+
+void addProduct(int id, const string& name) {
+    // Check if the product with the given ID already exists
+    for (const auto& product : inventory) {
+        if (product.id == id) {
+            cout << "Product with ID " << id << " already exists in the inventory.\n";
+            return;
+        }
+    }
+
+    // If the product does not exist, add it to the inventory
+    inventory.emplace_back(id, name);
+    cout << "Product added to the inventory.\n";
+}
+
+void removeProduct(int id) {
+    // Use erase-remove idiom to remove the product with the specified ID
+    inventory.erase(remove_if(inventory.begin(), inventory.end(),
+                    [id](const Product& p) { return p.id == id; }), inventory.end());
+
+    cout << "Product with ID " << id << " removed from the inventory.\n";
+}
+
+int main() {
+    // Example usage
+    addProduct(1, "Laptop");
+    addProduct(2, "Smartphone");
+    addProduct(3, "Headphones");
+
+    removeProduct(2);
+
+    return 0;
+}
